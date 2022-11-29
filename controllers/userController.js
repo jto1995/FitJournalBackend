@@ -1,6 +1,18 @@
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuid} = require("uuid");
 const fs = require("fs")
+const jwt = require('jsonwebtoken')
+
+function checkToken(req, res, next) {
+    const token = req.header.authorization.split(' ')[1];
+    if (token && jwt.verify(token, JWT_SECRET)) {
+        req.user = jwt.decode(token);
+        next();
+    }
+    else {
+        next();
+    }
+}
 
 exports.newUserInfo = ( req, res ) => {
     if (
@@ -8,7 +20,7 @@ exports.newUserInfo = ( req, res ) => {
         !req.body.name ||
         !req.body.password
     ){
-        res.status(400).send("Please fill out the sign up!")
+        res.status(400).send("Please fill out the sign up form!")
     }
     else {
         knex("users")
@@ -20,7 +32,7 @@ exports.newUserInfo = ( req, res ) => {
     }
 }
 
-exports.getUserInfo = ( req, res ) => {
+exports.getUserInfo = (checkToken, ( req, res ) => {
     knex("users")
     .where("id", req.params.id)
     .then((data) => {
@@ -29,7 +41,7 @@ exports.getUserInfo = ( req, res ) => {
     .catch((err) =>
     res.status(400).send('Error retrieving User Info')
     );
-}
+})
 
 exports.deleteUserInfo = (req, res ) => {
     knex("users")

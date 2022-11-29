@@ -6,7 +6,7 @@ const cors = require('cors')
 const { PORT, JWT_SECRET } = process.env;
 const userRoute = require("./routes/userRoute")
 const weightRoute = require("./routes/weightRoute")
-const exerciseRoute = require("./routes/exerciseRoute")
+const workoutRoute = require("./routes/workoutRoute")
 const loginRoute = require('./routes/loginRoute')
 
 app.use(cors());
@@ -15,7 +15,7 @@ app.use(express.static('public'));
 
 app.use("/weight", weightRoute);
 app.use("/user", userRoute);
-app.use("/exercise", exerciseRoute);
+app.use("/workout", workoutRoute);
 app.use("/login", loginRoute)
 
 app.listen(PORT, function() {

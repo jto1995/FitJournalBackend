@@ -11,3 +11,5 @@ router
     .get(userController.getUserInfo)
     .put(userController.editUserInfo)
     .delete(userController.deleteUserInfo)
+
+    module.exports = router;

@@ -13,4 +13,5 @@ router
     .delete(weightController.deleteUserWeight)
     //Update User Weight
     .put(weightController.editUserWeight)
-        
+    
+module.exports = router;
