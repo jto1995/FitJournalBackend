@@ -18,7 +18,7 @@ exports.up = function(knex) {
     table.string("exercise").notNullable();
     table.integer("sets").notNullable();
     table.integer("reps").notNullable();
-    table.timestamp(true, true);
+    table.timestamp("created_at").date()
   })
   .createTable("weight", (table) => {
     table.uuid("id").primary();
@@ -31,7 +31,7 @@ exports.up = function(knex) {
     table.integer("weight").notNullable();
     table.integer("bmi").notNullable();
     table.integer("height").notNullable();
-    table.timestamp(true, true);
+    table.timestamp("created_at", true);
   })
 };
 

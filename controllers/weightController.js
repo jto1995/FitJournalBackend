@@ -2,16 +2,26 @@ const knex = require("knex")(require("../knexfile"));
 const { v4: uuid } = require("uuid");
 const fs = require("fs")
 
-exports.getUserWeight = ( req, res ) => {
-    knex("weight")
-    .where("id", req.params.id) 
-    .then((data) => {
-        res.status(200).json(data);
-    })
-    .catch((err) =>
-    res.status(400).send('Error retrieving Weight Log')
-    );
-};
+function checkToken(req, res, next) {
+    const token = req.header.authorization.split(' ')[1];
+    if (token && jwt.verify(token, JWT_SECRET)) {
+        req.user = jwt.decode(token);
+        next();
+    }
+    else {
+        next();
+    }
+}
+
+// exports.getUserWeight = ( req, res ) => {
+//     knex("weight")
+//     .then((data) => {
+//         res.status(200).json(data);
+//     })
+//     .catch((err) =>
+//     res.status(400).send('Error retrieving Weight Log')
+//     );
+// }
 
 exports.newUserWeight = ( req, res ) => {
     if(

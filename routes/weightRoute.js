@@ -5,13 +5,9 @@ const weightController = require("../controllers/weightController")
 
 router
     .route('/:id')
-    //get User Weight
-    .get(weightController.getWeight)
-    //post User Weight
-    .post(weightController.newWeight)
-    //Delete User Weight
+    // .get(weightController.getUserWeight)
+    // .post(weightController.newWeight)
     .delete(weightController.deleteUserWeight)
-    //Update User Weight
     .put(weightController.editUserWeight)
     
 module.exports = router;
