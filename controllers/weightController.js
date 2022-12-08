@@ -13,31 +13,6 @@ function checkToken(req, res, next) {
     }
 }
 
-// exports.getUserWeight = ( req, res ) => {
-//     knex("weight")
-//     .then((data) => {
-//         res.status(200).json(data);
-//     })
-//     .catch((err) =>
-//     res.status(400).send('Error retrieving Weight Log')
-//     );
-// }
-
-exports.newUserWeight = ( req, res ) => {
-    if(
-        !req.body.weight ||
-        !req.body.bmi
-    ){
-        res.send(400).send("Please fill out your weight")
-    } else {
-        knew("weight")
-        .where("id", req.params.id)
-        .insert({ id: uuid(), ...req.body})
-        .then(() => {
-            res.status(201).send("Your weight has been uploaded")
-        })
-    }
-}
 
 exports.deleteUserWeight = ( req, res) => {
     knex("weight")

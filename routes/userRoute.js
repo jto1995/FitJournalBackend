@@ -1,17 +1,17 @@
 const router = require('express').Router();
 
 const userController = require('../controllers/userController')
-
+const middleware = require('../middleware/middleware')
 
 router
     .route("/")
     .post(userController.newUserInfo)
-    .get(userController.getUserInfo)
-
-router
+    .get(middleware.checkToken, userController.getUserInfo)
+    .delete(userController.deleteUserInfo)
+    
+    router
     .route("/:id")
     // .put(userController.editUserInfo)
-    .delete(userController.deleteUserInfo)
     
 router
     .route("/login")
@@ -19,7 +19,7 @@ router
     
     router
     .route('/weight')
-    .post(userController.checkToken, userController.newWeight)
-    .get(userController.checkToken,userController.getUserWeight)
+    .post(middleware.checkToken, userController.newWeight)
+    .get(middleware.checkToken, userController.getUserWeight)
 
     module.exports = router;
