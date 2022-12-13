@@ -2,16 +2,6 @@ const knex = require("knex")(require("../knexfile"));
 const { v4: uuid } = require("uuid");
 const fs = require("fs")
 
-function checkToken(req, res, next) {
-    const token = req.header.authorization.split(' ')[1];
-    if (token && jwt.verify(token, JWT_SECRET)) {
-        req.user = jwt.decode(token);
-        next();
-    }
-    else {
-        next();
-    }
-}
 
 
 exports.deleteUserWeight = ( req, res) => {

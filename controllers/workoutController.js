@@ -1,28 +1,76 @@
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuid } = require("uuid");
 
-exports.getWorkoutHistory = (req,res) => {
-    knex("workout")
+exports.getWorkoutTemplates = (req, res) => {
+  knex("workout_templates")
+    .join(
+      "workout_templates_exercise",
+      "workout_templates.id",
+      "workout_templates_exercise.workout_templates_id",
+    )
+    .join(
+      "exercises",
+      "exercises.id",
+      "workout_templates_exercise.exercises_id"
+    )
+    .select(
+      "workout_templates.id",
+      "workout_templates.template_name",
+      "exercises.name",
+      )
     .then((data) => {
-        res.status(200).send(data)
+      console.log(data)
+      res.status(200).send(data);
     })
-    .catch((err) =>
-    res.status(400).send('error retrieving history'))
-}
+    .catch((err) => res.status(400).send("error retrieving history"));
+};
 
-exports.postNewWorkout = (req,res) => {
-    if(
-        !req.workout.exercise ||
-        !req.workout.sets ||
-        !req.workout.reps
-    ){
-        res.status(400).send("Please fill out your exercise")
-    }else {
-        knex("workout")
-        .insert({id: uuid(), ...req.body})
-        .then(() =>  {
-            res.status(201).send("Your workout has been uploaded!")
-        })
-    }
-    
+exports.getSingleWorkoutTemplate = (req, res) => {
+  knex("workout_templates")
+    .join(
+      "workout_templates_exercise",
+      "workout_templates.id",
+      "workout_templates_exercise.workout_templates_id",
+    )
+    .join(
+      "exercises",
+      "exercises.id",
+      "workout_templates_exercise.exercises_id"
+    )
+    .select(
+      "workout_templates.id",
+      "workout_templates.template_name",
+      "exercises.name",
+      )
+    .where("workout_templates.id", req.params.id)
+    .then((data) => {
+      console.log(data)
+      res.status(200).send(data);
+    })
+    .catch((err) => res.status(400).send("error retrieving history"));
+};
+
+exports.getUserWorkout = ( req, res) => {
+  knex("workouts")
+    .then((data) => {
+      const userWorkout = data.filter((user) => user.user_id === req.user.id);
+      res.status(200).send(userWorkout)
+    })
+}
+exports.displayUserWorkout = ( req, res) => {
+  knex("workouts")
+    .join(
+      "workout_exercise",
+      "workout_exercise.workouts_id",
+      "workouts.id"
+    )
+    .join(
+      "exercises",
+      "exercises.id",
+      "workout_exercise.exercises_id"
+    )
+    .then((data) => {
+      const userWorkout = data.filter((user) => user.user_id === req.user.id);
+      res.status(200).send(userWorkout)
+    })
 }

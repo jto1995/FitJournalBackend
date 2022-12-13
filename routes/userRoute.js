@@ -11,7 +11,7 @@ router
     
     router
     .route("/:id")
-    // .put(userController.editUserInfo)
+    .get(userController.getUsersProfile)
     
 router
     .route("/login")

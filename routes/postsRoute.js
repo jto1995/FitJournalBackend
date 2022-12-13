@@ -7,5 +7,5 @@ router
     .post(middleware.checkToken, postController.newPost)
 router
     .route('/:id')
-    .get(postController.getPostbyID)
+
 module.exports = router

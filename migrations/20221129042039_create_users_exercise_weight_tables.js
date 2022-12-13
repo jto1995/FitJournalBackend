@@ -70,7 +70,25 @@ exports.up = function(knex) {
     table.primary(["workouts_id", "exercises_id"])
 
   })
-
+  .createTable("workout_templates", (table) => {
+    table.uuid("id").primary()
+    table.string("template_name").notNullable();
+  })
+  .createTable("workout_templates_exercise", (table) => {
+    table
+    .uuid("workout_templates_id")
+    .references("id")
+    .inTable("workout_templates")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE")
+    table
+    .uuid("exercises_id")
+    .references("id")
+    .inTable("exercises")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+    table.primary(["workout_templates_id", "exercises_id"])
+  })
 };
 
 
@@ -79,5 +97,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable("exercises").dropTable("workout_exercise").dropTable("workouts").dropTable("posts").dropTable("weight").dropTable("users");
+  return knex.schema.dropTable("workout_templates_exercise").dropTable("workout_templates").dropTable("workout_exercise").dropTable("exercises").dropTable("workouts").dropTable("posts").dropTable("weight").dropTable("users");
 };

@@ -24,14 +24,4 @@ exports.newPost = ( req, res ) => {
     })
 }
 
-exports.getPostbyID = ( req, res ) => {
-    if (req.user){
-    knex("posts")
-    .then((data) => {
-        data.filter(
-        (user) =>
-        user.user_id === req.params.id)
-        res.status(200).json(data)
-    })
-    }
-}
+
