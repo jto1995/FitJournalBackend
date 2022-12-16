@@ -74,5 +74,26 @@ module.exports = [
         "category": "Biceps",
         "name": "Hammer Curls"
     },
+    {
+        "id": "d0c2mmciom",
+        "category": "Chest",
+        "name": "Cable Flies"
+    },
+    {
+        "id": "d03mciom",
+        "category": "Chest",
+        "name": "Decline Bench Press"
+    },
+    {
+        "id": "goiaj3902",
+        "category": "Legs",
+        "name": "Bulgarian Squats"
+    },
+    {
+        "id": "goia12r1j3902",
+        "category": "Back",
+        "name": "Sumo Deadlifts"
+    }
+
 
 ]

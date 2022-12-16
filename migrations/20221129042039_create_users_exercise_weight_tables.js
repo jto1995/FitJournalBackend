@@ -1,6 +1,5 @@
 const e = require("cors");
 
-const timestamp = Date.now()
 exports.up = function(knex) {
   return knex.schema
   .createTable('users', (table) => {
@@ -49,12 +48,10 @@ exports.up = function(knex) {
     table.uuid("id").primary();
     table.string("category").notNullable();
     table.string("name").notNullable();
-    table.integer("sets")
-    table.integer("reps");
-    table.integer("weight");
   })
 
   .createTable("workout_exercise", (table) => {
+    table.uuid("id").primary();
     table
     .uuid("workouts_id")
     .references("id")
@@ -67,18 +64,17 @@ exports.up = function(knex) {
     .inTable("exercises")
     .onUpdate("CASCADE")
     .onDelete("CASCADE");
-    table.primary(["workouts_id", "exercises_id"])
+    table.integer("sets")
+    table.integer("reps");
+    table.integer("weight");
+    table.timestamp('created_at').defaultTo(knex.fn.now());
 
-  })
-  .createTable("workout_templates", (table) => {
-    table.uuid("id").primary()
-    table.string("template_name").notNullable();
   })
   .createTable("workout_templates_exercise", (table) => {
     table
-    .uuid("workout_templates_id")
+    .uuid("workouts_id")
     .references("id")
-    .inTable("workout_templates")
+    .inTable("workouts")
     .onUpdate("CASCADE")
     .onDelete("CASCADE")
     table
@@ -87,7 +83,7 @@ exports.up = function(knex) {
     .inTable("exercises")
     .onUpdate("CASCADE")
     .onDelete("CASCADE");
-    table.primary(["workout_templates_id", "exercises_id"])
+    table.primary(["workouts_id", "exercises_id"])
   })
 };
 
@@ -97,5 +93,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable("workout_templates_exercise").dropTable("workout_templates").dropTable("workout_exercise").dropTable("exercises").dropTable("workouts").dropTable("posts").dropTable("weight").dropTable("users");
+  return knex.schema.dropTable("workout_templates_exercise").dropTable("workout_exercise").dropTable("exercises").dropTable("workouts").dropTable("posts").dropTable("weight").dropTable("users");
 };

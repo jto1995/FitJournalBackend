@@ -4,7 +4,6 @@ const weightData = require("../seed_data/weight")
 const postData = require("../seed_data/posts")
 const workoutData = require('../seed_data/workouts')
 const workoutExerciseData = require('../seed_data/workout_exercise')
-const workoutTemplate = require('../seed_data/workout_templates')
 const workoutTemplateExecise = require('../seed_data/workout_templates_exercise')
 exports.seed = function (knex) {
   return knex("users")
@@ -19,12 +18,6 @@ exports.seed = function (knex) {
       return knex("weight").insert(weightData);
     })
     .then(() => {
-        return knex("exercises").del();
-    })
-    .then(() => {
-        return knex("exercises").insert(exerciseData)
-    })
-    .then(() => {
       return knex("posts").del();
     })
     .then(() => {
@@ -37,16 +30,16 @@ exports.seed = function (knex) {
       return knex("workouts").insert(workoutData)
     })
     .then(() => {
+        return knex("exercises").del();
+    })
+    .then(() => {
+        return knex("exercises").insert(exerciseData)
+    })
+    .then(() => {
       return knex("workout_exercise").del();
     })
     .then(() => {
       return knex("workout_exercise").insert(workoutExerciseData)
-    })
-    .then(() => {
-      return knex("workout_templates").del();
-    })
-    .then(() => {
-      return knex("workout_templates").insert(workoutTemplate)
     })
     .then(() => {
       return knex("workout_templates_exercise").del();

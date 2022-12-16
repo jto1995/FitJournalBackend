@@ -94,26 +94,4 @@ exports.loginUser = (req, res) => {
   }
 };
 
-exports.getUserWeight = (req, res) => {
-  if (req.user) {
-    knex("weight")
-      .then((data) => {
-        const userWeight = data.filter((user) => user.user_id === req.user.id);
-        res.status(200).json(userWeight);
-      })
-      .catch((err) => res.status(400).send("Error retrieving Weight Log"));
-  }
-};
 
-exports.newWeight = (req, res) => {
-  if (!req.body.weight) {
-    res.status(400).send("Please fill out your weight");
-  } else {
-    knex("weight")
-      .where((user) => user.user_id === req.user.id)
-      .insert({ id: uuid(), user_id: req.user.id, ...req.body })
-      .then(() => {
-        res.status(201).send("Your weight has been uploaded");
-      });
-  }
-};

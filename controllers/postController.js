@@ -24,4 +24,23 @@ exports.newPost = ( req, res ) => {
     })
 }
 
+exports.displayUserPosts = (req, res) => {
+    knex("posts")
+    .where('user_id', req.params.id)
+    .then((data) => {
+        res.status(200).send(data)
+    })
+}
+
+exports.deletePost = (req, res) => { 
+    knex("posts")
+    .where( "id", req.params.id)
+    .del()
+    .then((data) => {
+        console.log(data)
+        res.status(200).send('post deleted')
+    })
+
+}
+
 
