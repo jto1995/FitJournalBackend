@@ -37,7 +37,6 @@ exports.deletePost = (req, res) => {
     .where( "id", req.params.id)
     .del()
     .then((data) => {
-        console.log(data)
         res.status(200).send('post deleted')
     })
 

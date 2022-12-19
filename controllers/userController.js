@@ -32,7 +32,6 @@ exports.getUsersProfile = (req, res) => {
   knex("users")
   .where("users.id", req.params.id)
   .then((data) => {
-    console.log(data)
     res.status(200).send(data);
   })
   .catch((err) => res.status(400).send(`${err} retrieving history`))
@@ -86,7 +85,6 @@ exports.loginUser = (req, res) => {
         }
       })
       .catch((err) => {
-        console.log(err);
         res.status(400).send("Error retrieveing ");
       });
   } else {

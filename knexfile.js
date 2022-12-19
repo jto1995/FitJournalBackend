@@ -11,5 +11,6 @@ module.exports = {
     database: "Capstone",
     user: "root",
     password: "rootroot",
-  },
+    dateStrings: true
+    },
 };

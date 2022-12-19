@@ -7,8 +7,8 @@ router
     .route('/')
     .get(middleware.checkToken, weightController.getUserWeight)
     .post(middleware.checkToken, weightController.newWeight)
-    // .delete(weightController.deleteUserWeight)
-    // .put(weightController.editUserWeight)
+    .delete(weightController.deleteUserWeight)
+    .put(weightController.editUserWeight)
 
 
     

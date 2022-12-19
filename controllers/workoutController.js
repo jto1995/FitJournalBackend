@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuid } = require("uuid");
+const workout_exercise = require("../seed_data/workout_exercise");
 
 exports.getWorkoutTemplates = (req, res) => {
   knex("workouts")
@@ -15,7 +16,6 @@ exports.getWorkoutTemplates = (req, res) => {
     )
     .select("workouts.id", "workouts.workout_name", "exercises.name")
     .then((data) => {
-      console.log(data);
       res.status(200).send(data);
     })
     .catch((err) => res.status(400).send("error retrieving history"));
@@ -26,7 +26,9 @@ exports.getSingleWorkoutTemplate = (req, res) => {
     .select(
       "workout_exercise.workouts_id",
       "workout_exercise.exercises_id",
-      "exercises.name"
+      "exercises.name",
+      "exercises.category",
+      "workout_exercise.id"
     )
     .from("workouts")
     .join(
@@ -37,11 +39,10 @@ exports.getSingleWorkoutTemplate = (req, res) => {
     .join(
       "exercises",
       "exercises.id",
-      "workout_exercise.exercises_id"
+      "workout_exercise.exercises_id",
     )
     .where("workouts.id", req.params.id)
     .then((data) => {
-      console.log(data);
       res.status(200).send(data);
     })
     .catch((err) => res.status(400).send("error retrieving history"));
@@ -61,7 +62,6 @@ exports.displayUserWorkout = (req, res) => {
     .select("workout_exercise.workouts_id", "exercises.name")
     .where('workout_exercise.workouts_id', req.params.id)
     .then((data) => {
-      // const userWorkout = data.filter((user) => user.user_id === req.user.id);
       res.status(200).send(data);
     });
 };
@@ -96,11 +96,9 @@ exports.postNewUserWorkoutTemplate = (req, res) => {
         );
       })
       .then((response) => {
-        console.log(response);
         res.status(201).send("New Template Saved");
       })
       .catch((err) => {
-        console.log(err);
       });
   }
 };
@@ -110,7 +108,6 @@ exports.postWorkoutLog = (req, res) => {
     .where((user) => user.user_id === req.user.id)
     .insert({
       id: uuid(),
-      user_id: req.user.id,
       workouts_id: req.body.workouts_id,
       exercises_id: req.body.exercise_id,
       sets: req.body.sets,
@@ -118,7 +115,36 @@ exports.postWorkoutLog = (req, res) => {
       weight: req.body.weight,
     })
     .then(() => {
-      console.log();
       res.status(201).send("Log has been uploaded");
     });
 };
+
+exports.getWorkoutLog = (req,res) => {
+  knex("workouts")
+  .where((user) => user.user_id === req.user.id)
+  .join("workout_exercise", "workout_exercise.workouts_id", "workouts.id")
+  .join("exercises", "exercises.id", "workout_exercise.exercises_id")
+  .select("workouts.id", "workouts.workout_name", "workout_exercise.created_at", "workout_exercise.sets", "workout_exercise.reps", "workout_exercise.weight", "exercises.names")
+  .then((data) => {
+    const userWorkout = data.filter((workout_exercise) => workout_exercise.sets !== null);
+    res.status(200).send(userWorkout);
+  })}
+
+exports.deleteSingleExerciseFromTemplate = (req,res) => {
+  knex("workout_exercise")
+  .where("id" , req.params.id)
+  .del()
+  .then((data) => {
+    res.status(200).send('exercise deleted')
+  })
+  
+}
+
+exports.deleteEntireWorkout = (req, res) => {
+  knex("workouts")
+  .where("id", req.params.id)
+  .del()
+  .then((data) => {
+    res.status(200).send("Template Deleted")
+  })
+}

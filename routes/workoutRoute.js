@@ -19,6 +19,7 @@ router
     router
     .route('/template/:id')
     .get(workoutController.getSingleWorkoutTemplate)
+    .delete(workoutController.deleteEntireWorkout)
         
     router
     .route('/exercise')
@@ -27,6 +28,11 @@ router
     router
     .route('/log')
     .post(middleware.checkToken, workoutController.postWorkoutLog)
+    .get(middleware.checkToken, workoutController.getWorkoutLog)
+
+    router
+    .route('/log/:id')
+    .delete(workoutController.deleteSingleExerciseFromTemplate)
 
 
 module.exports = router;
